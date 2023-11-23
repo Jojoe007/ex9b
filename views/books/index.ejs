@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        Jojoe007 Shop
+    </title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+        integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Books</h1>
+        <form>
+            <div class="form-group">
+                <label for="categories">Categories:</label>
+                <select class="form-control" name="categories" id="categories">
+                    <option value="Java">Java</option>
+                    <option value="Perl">Perl</option>
+                    <option value="Microsoft .NET">Microsoft .NET</option>
+                    <option value="Internet">Internet</option>
+                    <option value="Programming">Programming</option>
+                    <option value="Client-Server">Client-Server</option>
+                    <option value="Miscellaneous">Miscellaneous</option>
+                    <option value="Web Development">Web Development</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="pageCount">Page count:</label>
+                <input type="number" class="form-control" name="pageCount" id="pageCount" value="200">
+            </div>
+
+            <button name="submit" id="submit" type="button" class="btn btn-primary">Filter</button>
+
+        </form>
+        <br>
+        <div id="books" class="d-flex justify-content-between align-items-start flex-wrap"></div>
+    </div>
+
+    <script>
+        $("#submit").click(function (event) {
+            const pageCount = $("#pageCount").val();
+            const categories = $("#categories").val();
+
+            $.ajax({
+                method: 'GET',
+                url: `/books/filter?categories=${categories}&pageCount=${pageCount}`,
+            }).then(function (data) {
+                $("#books").empty();
+                data.forEach(element => {
+                    $("#books").append(`
+                        <div class="card ml-auto mr-auto mb-2" style="width: 18rem;">
+                            <img class="card-img-top" src="${element.thumbnailUrl}" alt="${element.title}">
+                            <div class="card-body">
+                                <h5 class="card-title">${element.title}</h5>
+                                <p class="card-text">
+                                    <div>isbn: </b> ${element.isbn}</div>
+                                    <div>Page Count: </b> ${element.pageCount}</div>
+                                    <div>Category : </b> ${element.categories}</div>
+                                </p>
+                            </div>
+                        </div>
+                    `);
+                });
+            });
+        });
+    </script>
+
+</body>
+
+</html>
+<!-- 
+<div class="card bg-dark text-white">
+    <img src="${element.thumbnailUrl}" width="100" />
+    <div>
+        <div><b>Title: </b>${element.title}</div>
+        <div><b>ISBN: </b> ${element.isbn}</div>
+        <div><b>PG: </b> ${element.pageCount}</div>
+        <div><b>CT: </b> ${element.categories}</div>
+    </div>
+</div> -->
